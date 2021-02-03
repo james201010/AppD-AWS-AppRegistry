@@ -1,0 +1,14 @@
+!!com.appdynamics.cloud.aws.appregistry.ApplicationConfig
+
+controllerAccount: ""
+controllerUsername: ""
+controllerPassword: ""
+controllerHostName: "demo1.saas.appdynamics.com"
+controllerPort: 443
+controllerSslEnabled: true
+
+applicationNames:
+  - AD-Fraud-Detection
+  - AD-DevOps
+  - AD-Financial
+  - AD-Financial-Cloud
