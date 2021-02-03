@@ -24,10 +24,9 @@ public class AppdAppRegistryApplication {
 	
 	public static void main(String[] args) {
 		
+		Logger lgr = new Logger("");
 		
 		try {
-			
-			Logger lgr = new Logger("");
 			
 			// LOAD CONFIG
 			String confPath = System.getProperty(APP_CONF_KEY);
@@ -36,7 +35,10 @@ public class AppdAppRegistryApplication {
 
 			APP_CONFIG = yaml.load(inputStream);
 			
+			lgr.printBanner(true);
 			
+			lgr.log("#########################################################################################    STARTING APPDYNAMICS AWS APPREGISTRY UTILITIES    ################################################################################");
+			lgr.log("");
 			
 			lgr.info("");
 			lgr.info(" - Initializing connection to AppDynamics Controller");
@@ -89,7 +91,7 @@ public class AppdAppRegistryApplication {
 				lgr.info("  App Name: " + app.getName());
 				lgr.info("  App Id: " + app.getId());
 				lgr.info("  App Description: " + app.getDescription());
-				lgr.info("  Account Guid: " + app.getAccountGuid());
+				//lgr.info("  Account Guid: " + app.getAccountGuid());
 				
 				lgr.info("  Number of Tiers: " + app.getNumberOfTiers());
 				lgr.info("  Number of Nodes: " + app.getNumberOfNodes());
@@ -100,11 +102,11 @@ public class AppdAppRegistryApplication {
 			
 			
 			//String json = controller.getNodesAsJson("AD-Financial-Cloud");
-			String json = new Gson().toJson(appsToPublish.get(1));
+			//String json = new Gson().toJson(appsToPublish.get(1));
 			
-			System.out.println("*********************************************************************");
-			System.out.println(json);
-			System.out.println("*********************************************************************");	
+			//System.out.println("*********************************************************************");
+			//System.out.println(json);
+			//System.out.println("*********************************************************************");	
 			
 			
 			
@@ -112,6 +114,9 @@ public class AppdAppRegistryApplication {
 			ex.printStackTrace();
 		}
 		
+
+		lgr.log("");
+		lgr.log("#########################################################################################    FINISHED APPDYNAMICS AWS APPREGISTRY UTILITIES    ################################################################################");
 		
 	}
 
