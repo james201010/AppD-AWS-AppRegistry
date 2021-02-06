@@ -19,7 +19,11 @@ public class AppRegUtils {
 	}
 
 	public static String getAppRegistryAppName(Application appdApp) throws Throwable {
-		return appdApp.getName() + "_" + appdApp.getAccountGuid();
+		
+		String baseName = appdApp.getName() + "-" + appdApp.getAccountGuid();
+		String finalName = StringUtils.replaceAll(baseName, " ", "_");
+		finalName = StringUtils.replaceAll(finalName, "-", "_");
+		return finalName;
 		
 	}
 	

@@ -16,7 +16,8 @@ public class DateUtils {
 //	
 //		try {
 //			
-//			DateUtils.formatDateTime(new Date());
+//			String strDate = DateUtils.formatDateTime(new Date());
+// 	        System.out.println(strDate);
 //			
 //		} catch (Throwable ex) {
 //			ex.printStackTrace();
@@ -36,7 +37,6 @@ public class DateUtils {
 		String pattern = "MMM-dd-yyyy | h:mm:ss a";
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 		String strDate = simpleDateFormat.format(new Date());
-		System.out.println(strDate);
 		return strDate;
 		
 	}

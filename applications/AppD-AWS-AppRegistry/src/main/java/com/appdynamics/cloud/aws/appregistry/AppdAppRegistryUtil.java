@@ -3,15 +3,17 @@ package com.appdynamics.cloud.aws.appregistry;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
 import com.appdynamics.cloud.aws.appregistry.json.Application;
+import com.appdynamics.cloud.aws.appregistry.model.AwsApplication;
+import com.appdynamics.cloud.aws.appregistry.model.AwsAttributeGroup;
+import com.appdynamics.cloud.aws.appregistry.utils.DateUtils;
 import com.appdynamics.cloud.aws.appregistry.utils.Logger;
 import com.appdynamics.cloud.aws.appregistry.utils.StringUtils;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 
 
@@ -245,7 +247,7 @@ public class AppdAppRegistryUtil {
 			lgr.info("  App ARN: " + awsApp.getArn());
 			lgr.info("  ----------------------------------------------------------------------------------------------------------");
 			lgr.info("");
-			
+			lgr.info("");
 			
 		}
 		
@@ -272,7 +274,72 @@ public class AppdAppRegistryUtil {
 		
 		AwsAppRegistryManager appReg = new AwsAppRegistryManager();
 		
+		List<AwsApplication> awsApps = appReg.listApplications();
 		
+		if (awsApps == null || awsApps.size() < 1) {
+			lgr.info("");
+			lgr.info("  -----------------------------  No Applications were found in AWS AppRegistry  ----------------------------");
+			lgr.info("");
+			lgr.info("");			
+		} else {
+			lgr.info("");
+			lgr.info("  --------------------------------  Found " + awsApps.size() + " Applications in AWS AppRegistry  -------------------------------");
+			lgr.info("");
+			lgr.info("");			
+			
+			for (AwsApplication awsApp : awsApps) {
+				
+				lgr.info("  ########################################### Application Found ############################################");
+				lgr.info("  App Name: " + awsApp.getName());
+				lgr.info("  App Id: " + awsApp.getId());
+				lgr.info("  App Description: " + awsApp.getDescription());
+				lgr.info("  App ARN: " + awsApp.getArn());
+				lgr.info("  App Associated Resource Count: " + awsApp.getAssociatedResourceCount());
+				lgr.info("  App Creation Time: " + DateUtils.formatDateTime(awsApp.getCreationTime()));
+				lgr.info("  App Last Update Time: " + DateUtils.formatDateTime(awsApp.getLastUpdateTime()));
+				
+				Map<String, String> awsTags = awsApp.getTags();
+				if (awsTags != null && awsTags.size() > 0) {
+					lgr.info("");
+					lgr.info("  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Tags Found ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+					
+					for (String tagKey : awsTags.keySet()) {
+						lgr.info("  " + tagKey + ": " + awsTags.get(tagKey));
+					}
+					
+				}
+				
+				List<AwsAttributeGroup> attrGroups = awsApp.getAttributeGroups();
+				if (attrGroups != null && attrGroups.size() > 0) {
+					lgr.info("");
+					lgr.info("  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Attribute Groups Found ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+					
+					
+					for (AwsAttributeGroup agroup : attrGroups) {
+						lgr.info("  Group Name: " + agroup.getName());
+						lgr.info("  Group Id: " + agroup.getId());
+						lgr.info("  Group Description: " + agroup.getDescription());
+						lgr.info("  Group ARN: " + agroup.getArn());
+						lgr.info("  Group Attributes: ");
+						lgr.log(agroup.getAttributes());
+						
+						lgr.info("  ----------------------------------------------------------------------------------------------------------");
+					}
+					
+					
+					
+				}
+				
+				
+				
+				lgr.info("  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+				lgr.info("");
+				lgr.info("");
+				
+			}
+			
+			
+		}
 		
 	}
 	
@@ -280,7 +347,7 @@ public class AppdAppRegistryUtil {
 	
 	protected static void delete() throws Throwable {
 		
-		
+		String x = "AD-Movie-Tickets-Core-b254bbaa-11b4-482b-ac5b-8830ee642105";
 		
 		
 	}
