@@ -117,7 +117,9 @@ public class AppdAppRegistryUtil {
 			
 			
 		} catch (Throwable ex) {
+			lgr.log(ex.getMessage());
 			ex.printStackTrace();
+			
 		}
 		
 
@@ -298,6 +300,8 @@ public class AppdAppRegistryUtil {
 				lgr.info("  App Creation Time: " + DateUtils.formatDateTime(awsApp.getCreationTime()));
 				lgr.info("  App Last Update Time: " + DateUtils.formatDateTime(awsApp.getLastUpdateTime()));
 				
+				Thread.currentThread().sleep(1000);
+				
 				Map<String, String> awsTags = awsApp.getTags();
 				if (awsTags != null && awsTags.size() > 0) {
 					lgr.info("");
@@ -307,6 +311,7 @@ public class AppdAppRegistryUtil {
 						lgr.info("  " + tagKey + ": " + awsTags.get(tagKey));
 					}
 					
+					Thread.currentThread().sleep(1000);
 				}
 				
 				List<AwsAttributeGroup> attrGroups = awsApp.getAttributeGroups();
@@ -326,7 +331,7 @@ public class AppdAppRegistryUtil {
 						lgr.info("  ----------------------------------------------------------------------------------------------------------");
 					}
 					
-					
+					Thread.currentThread().sleep(1000);
 					
 				}
 				
@@ -347,7 +352,11 @@ public class AppdAppRegistryUtil {
 	
 	protected static void delete() throws Throwable {
 		
-		String x = "AD-Movie-Tickets-Core-b254bbaa-11b4-482b-ac5b-8830ee642105";
+		lgr.info("");
+		lgr.info(" - Initializing connection to AWS AppRegistry");
+		
+		AwsAppRegistryManager appReg = new AwsAppRegistryManager();
+		appReg.deleteApplications();
 		
 		
 	}

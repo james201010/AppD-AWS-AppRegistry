@@ -7,8 +7,9 @@ controllerHostName: "demo1.saas.appdynamics.com"
 controllerPort: 443
 controllerSslEnabled: true
 
+jsonFilesDirectory: "/home/ec2-user/environment"
+
 applicationNames:
-  - AD-Fraud-Detection
-  - AD-DevOps
-  - AD-Financial
-  - AD-Financial-Cloud
+  - AD-Travel
+  - Ecommerce
+  - AD-Movie Tickets Core

@@ -17,6 +17,12 @@ import com.amazonaws.services.appregistry.model.CreateApplicationRequest;
 import com.amazonaws.services.appregistry.model.CreateApplicationResult;
 import com.amazonaws.services.appregistry.model.CreateAttributeGroupRequest;
 import com.amazonaws.services.appregistry.model.CreateAttributeGroupResult;
+import com.amazonaws.services.appregistry.model.DeleteApplicationRequest;
+import com.amazonaws.services.appregistry.model.DeleteApplicationResult;
+import com.amazonaws.services.appregistry.model.DeleteAttributeGroupRequest;
+import com.amazonaws.services.appregistry.model.DeleteAttributeGroupResult;
+import com.amazonaws.services.appregistry.model.DisassociateAttributeGroupRequest;
+import com.amazonaws.services.appregistry.model.DisassociateAttributeGroupResult;
 import com.amazonaws.services.appregistry.model.GetApplicationRequest;
 import com.amazonaws.services.appregistry.model.GetApplicationResult;
 import com.amazonaws.services.appregistry.model.GetAttributeGroupRequest;
@@ -28,6 +34,8 @@ import com.amazonaws.services.appregistry.model.ListAssociatedAttributeGroupsRes
 import com.appdynamics.cloud.aws.appregistry.model.AwsApplication;
 import com.appdynamics.cloud.aws.appregistry.model.AwsAttributeGroup;
 import com.appdynamics.cloud.aws.appregistry.utils.AppRegUtils;
+import com.appdynamics.cloud.aws.appregistry.utils.Logger;
+import com.appdynamics.cloud.aws.appregistry.utils.StringUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -37,6 +45,8 @@ import com.google.gson.GsonBuilder;
  */
 public class AwsAppRegistryManager {
 
+	protected static Logger lgr = new Logger("");
+	
 	private static final String ADTAGKEY_APP_ID = "APPD_APP_ID";
 	private static final String ADTAGKEY_APP_NAME = "APPD_APP_NAME";
 	private static final String ADTAGKEY_APP_NUM_TIERS = "APPD_APP_NUMBER_OF_TIERS";
@@ -72,10 +82,16 @@ public class AwsAppRegistryManager {
 		CreateAttributeGroupRequest cagReq = new CreateAttributeGroupRequest();
 		cagReq.setName(AppRegUtils.getAppRegistryAttrGroupName(appdApp));
 		cagReq.setDescription("Json model for Application : " + AppRegUtils.getAppRegistryAppName(appdApp));
+		
+		//lgr.info("    - AttrGroup Name: " + cagReq.getName());
+		//lgr.info("    - AttrGroup Description: " + cagReq.getDescription());
 		//cagReq.addTagsEntry(key, value)
 		
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		cagReq.setAttributes(gson.toJson(appdApp));
+		String json = gson.toJson(appdApp);
+		cagReq.setAttributes(json);
+		
+		StringUtils.saveStringAsFile(config.getJsonFilesDirectory() + "/" + caReq.getName() + ".json", json);
 		
 		CreateAttributeGroupResult cagRes = this.appRegistry.createAttributeGroup(cagReq);
 		AttributeGroup attrGroup = cagRes.getAttributeGroup();
@@ -89,7 +105,46 @@ public class AwsAppRegistryManager {
 		return awsApp;
 	}
 	
-	
+	public void deleteApplications() throws Throwable {
+		List<AwsApplication> awsApps = this.listApplications();
+		
+		if (awsApps != null && awsApps.size() > 0) {
+			
+			for (AwsApplication awsApp : awsApps) {
+				
+				List<AwsAttributeGroup> attrGroups = awsApp.getAttributeGroups();
+				if (attrGroups != null && attrGroups.size() > 0) {
+					
+					for (AwsAttributeGroup attrGroup : attrGroups) {
+						
+						DisassociateAttributeGroupRequest diagReq = new DisassociateAttributeGroupRequest();
+						diagReq.setApplication(awsApp.getId());
+						diagReq.setAttributeGroup(attrGroup.getId());
+						DisassociateAttributeGroupResult diagRes =  this.appRegistry.disassociateAttributeGroup(diagReq);
+						
+						
+						DeleteAttributeGroupRequest deagReq = new DeleteAttributeGroupRequest();
+						deagReq.setAttributeGroup(attrGroup.getId());
+						DeleteAttributeGroupResult deagRes = this.appRegistry.deleteAttributeGroup(deagReq);
+						
+						
+					}
+				}
+				
+				// delete app
+				DeleteApplicationRequest daReq = new DeleteApplicationRequest();
+				daReq.setApplication(awsApp.getId());
+				DeleteApplicationResult daRes = this.appRegistry.deleteApplication(daReq);
+				
+				
+			}
+			
+			
+			
+		}
+		
+		
+	}
 	
 	public List<AwsApplication> listApplications() throws Throwable {
 	
