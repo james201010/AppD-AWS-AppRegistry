@@ -353,10 +353,13 @@ public class AppdAppRegistryUtil {
 	protected static void delete() throws Throwable {
 		
 		lgr.info("");
-		lgr.info(" - Initializing connection to AWS AppRegistry");
 		
-		AwsAppRegistryManager appReg = new AwsAppRegistryManager();
-		appReg.deleteApplications();
+		lgr.info(" - This action has been disabled");
+		
+		//lgr.info(" - Initializing connection to AWS AppRegistry");
+		
+		//AwsAppRegistryManager appReg = new AwsAppRegistryManager();
+		//appReg.deleteApplications();
 		
 		
 	}
