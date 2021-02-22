@@ -49,7 +49,7 @@ public class AppdAppRegistryUtil {
 			if (action == null) {
 				lgr.error("Missing startup property -D" + APP_ACTION_KEY);
 				lgr.error("Please set this property -D" + APP_ACTION_KEY + "=" + APP_ACTION_CREATE 
-						+ "  OR -D" + APP_ACTION_KEY + "=" + APP_ACTION_DELETE);
+						+ "  OR -D" + APP_ACTION_KEY + "=" + APP_ACTION_DELETE + "  OR -D" + APP_ACTION_KEY + "=" + APP_ACTION_LIST);
 				lgr.carriageReturn();
 				lgr.log("#########################################################################################    FINISHED APPDYNAMICS AWS APPREGISTRY UTILITIES    ################################################################################");
 
