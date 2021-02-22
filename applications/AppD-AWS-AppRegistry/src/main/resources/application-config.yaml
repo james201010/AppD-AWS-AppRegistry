@@ -11,3 +11,5 @@ jsonFilesDirectory: "/home/ec2-user/environment"
 
 applicationNames:
   - AD-Travel
+  - Ecommerce
+  - AD-Movie Tickets Core
